@@ -1,5 +1,4 @@
 import { Room, Client } from "@colyseus/core";
-//import { MyRoomState } from "./schema/MyRoomState";
 
 import { MapSchema, Schema, type } from "@colyseus/schema";
 
@@ -19,9 +18,9 @@ export class MyRoom extends Room<MyRoomState> {
 
   state = new MyRoomState();
   onCreate(options: any) {
-    console.log("Room created ", this.roomId);
-    console.log("Custom name", options.custom_name);
-    console.log("Date limit duration ", options.expires);
+    // console.log("Room created ", this.roomId);
+    // console.log("Custom name", options.custom_name);
+    // console.log("Date limit duration ", options.expires);
 
     this.state.timeLeft = +options.expires;
 
@@ -32,7 +31,7 @@ export class MyRoom extends Room<MyRoomState> {
         player.y = data.y;
         player.z = data.z;
       }
-      console.log(`playerMoved [${(player.x, player.y, player.z)}]`);
+      //  console.log(`playerMoved [${(player.x, player.y, player.z)}]`);
       this.broadcast("playerMoved", {
         sessionId: client.sessionId,
         x: player.x,
@@ -52,15 +51,18 @@ export class MyRoom extends Room<MyRoomState> {
     this.onMessage("ice", (client, candidate) => {
       this.broadcast("ice", candidate, { except: client });
     });
+
+    this.onMessage("chat", (client, data) => {
+      this.broadcast("chat", data);
+    });
   }
 
   onJoin(client: Client, options: any) {
     this.state.players.set(client.sessionId, new Player());
-    console.log(client.sessionId, "joined!");
+
     this.broadcast("playerJoined", client.sessionId);
 
     if (this.clients.length === 2) {
-      console.log("2 users in the room..");
       this.broadcast("startDate", this.state.timeLeft);
       this.broadcast("players", this.clients.length);
     }
@@ -68,11 +70,11 @@ export class MyRoom extends Room<MyRoomState> {
 
   onLeave(client: Client, consented: boolean) {
     this.state.players.delete(client.sessionId);
-    console.log(client.sessionId, "left!");
+
     this.broadcast("playerLeft", client.sessionId);
   }
 
   onDispose() {
-    console.log("room", this.roomId, "disposing...");
+    this.broadcast("disposing", "Disposing empty Black Ground room..");
   }
 }
