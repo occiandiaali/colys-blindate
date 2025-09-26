@@ -4,7 +4,7 @@ import { MapSchema, Schema, type } from "@colyseus/schema";
 
 class Player extends Schema {
   @type("number") x = 0;
-  @type("number") y = 0.25;
+  @type("number") y = 0.3;
   @type("number") z = 0;
 }
 
@@ -15,6 +15,7 @@ class MyRoomState extends Schema {
 
 export class MyRoom extends Room<MyRoomState> {
   maxClients = 2;
+  peerConnection: any;
 
   state = new MyRoomState();
   onCreate(options: any) {
