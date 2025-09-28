@@ -39,16 +39,34 @@ export class GreenRoom extends Room<GreenRoomState> {
       });
     });
 
-    this.onMessage("offer", (client, offer) => {
-      this.broadcast("offer", offer, { except: client });
+    this.onMessage("voice-offer", (client, data) => {
+      const target = this.clients.find((c) => c.sessionId === data.to);
+      if (target) {
+        target.send("voice-offer", {
+          from: client.sessionId,
+          offer: data.offer,
+        });
+      }
     });
 
-    this.onMessage("answer", (client, answer) => {
-      this.broadcast("answer", answer, { except: client });
+    this.onMessage("voice-answer", (client, data) => {
+      const target = this.clients.find((c) => c.sessionId === data.to);
+      if (target) {
+        target.send("voice-answer", {
+          from: client.sessionId,
+          answer: data.answer,
+        });
+      }
     });
 
-    this.onMessage("ice", (client, candidate) => {
-      this.broadcast("ice", candidate, { except: client });
+    this.onMessage("ice-candidate", (client, data) => {
+      const target = this.clients.find((c) => c.sessionId === data.to);
+      if (target) {
+        target.send("ice-candidate", {
+          from: client.sessionId,
+          candidate: data.candidate,
+        });
+      }
     });
 
     this.onMessage("chat", (client, data) => {
