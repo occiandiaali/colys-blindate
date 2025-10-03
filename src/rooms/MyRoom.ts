@@ -4,7 +4,7 @@ import { MapSchema, Schema, type } from "@colyseus/schema";
 
 class Player extends Schema {
   @type("number") x = 0;
-  @type("number") y = 0.3;
+  @type("number") y = -0.2;
   @type("number") z = 0;
 }
 
