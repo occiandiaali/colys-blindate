@@ -41,34 +41,13 @@ export class MyRoom extends Room<MyRoomState> {
       });
     });
 
-    this.onMessage("voice-offer", (client, data) => {
-      const target = this.clients.find((c) => c.sessionId === data.to);
-      if (target) {
-        target.send("voice-offer", {
-          from: client.sessionId,
-          offer: data.offer,
-        });
-      }
-    });
-
-    this.onMessage("voice-answer", (client, data) => {
-      const target = this.clients.find((c) => c.sessionId === data.to);
-      if (target) {
-        target.send("voice-answer", {
-          from: client.sessionId,
-          answer: data.answer,
-        });
-      }
-    });
-
-    this.onMessage("ice-candidate", (client, data) => {
-      const target = this.clients.find((c) => c.sessionId === data.to);
-      if (target) {
-        target.send("ice-candidate", {
-          from: client.sessionId,
-          candidate: data.candidate,
-        });
-      }
+    this.onMessage("peer-id", (client, message) => {
+      // Broadcast PeerJS ID to other client
+      this.clients.forEach((c) => {
+        if (c.sessionId !== client.sessionId) {
+          c.send("peer-id", message);
+        }
+      });
     });
 
     this.onMessage("chat", (client, data) => {

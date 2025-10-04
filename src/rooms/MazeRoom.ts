@@ -7,15 +7,15 @@ class Player extends Schema {
   @type("number") z = 0;
 }
 
-class GreenRoomState extends Schema {
+class MazeRoomState extends Schema {
   @type({ map: Player }) players = new MapSchema<Player>();
 
   @type("number") timeLeft: number;
 }
 
-export class GreenRoom extends Room<GreenRoomState> {
+export class MazeRoom extends Room<MazeRoomState> {
   maxClients = 2;
-  state = new GreenRoomState();
+  state = new MazeRoomState();
 
   onCreate(options: any) {
     // console.log("Room created ", this.roomId);

@@ -7,6 +7,7 @@ import { playground } from "@colyseus/playground";
  */
 import { MyRoom } from "./rooms/MyRoom";
 import { GreenRoom } from "./rooms/GreenRoom";
+import { MazeRoom } from "./rooms/MazeRoom";
 
 export default config({
   initializeGameServer: (gameServer) => {
@@ -15,6 +16,7 @@ export default config({
      */
     gameServer.define("my_room", MyRoom);
     gameServer.define("green_room", GreenRoom);
+    gameServer.define("maze_room", MazeRoom);
   },
 
   initializeExpress: (app) => {
