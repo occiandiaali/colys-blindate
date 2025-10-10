@@ -41,6 +41,10 @@ export class MyRoom extends Room<MyRoomState> {
       });
     });
 
+    this.onMessage("cubeTouch", (client, data) => {
+      this.broadcast("cubeTouch", data);
+    });
+
     this.onMessage("peer-id", (client, message) => {
       // Broadcast PeerJS ID to other client
       this.clients.forEach((c) => {
