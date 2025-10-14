@@ -8,12 +8,18 @@ import { playground } from "@colyseus/playground";
 import { MyRoom } from "./rooms/MyRoom";
 import { GreenRoom } from "./rooms/GreenRoom";
 import { MazeRoom } from "./rooms/MazeRoom";
+import { ForestRoom } from "./rooms/ForestRoom";
+import { HoodMapRoom } from "./rooms/HoodMapRoom";
+import { PlayParkRoom } from "./rooms/PlayParkRoom";
 
 export default config({
   initializeGameServer: (gameServer) => {
     /**
      * Define your room handlers:
      */
+    gameServer.define("forest", ForestRoom);
+    gameServer.define("hood_map", HoodMapRoom);
+    gameServer.define("play_park", PlayParkRoom);
     gameServer.define("my_room", MyRoom);
     gameServer.define("green_room", GreenRoom);
     gameServer.define("maze_room", MazeRoom);
