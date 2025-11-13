@@ -11,12 +11,14 @@ import { MazeRoom } from "./rooms/MazeRoom";
 import { ForestRoom } from "./rooms/ForestRoom";
 import { HoodMapRoom } from "./rooms/HoodMapRoom";
 import { PlayParkRoom } from "./rooms/PlayParkRoom";
+import { CordeliaCourt } from "./rooms/CordeliaCourt";
 
 export default config({
   initializeGameServer: (gameServer) => {
     /**
      * Define your room handlers:
      */
+    gameServer.define("cordelia_court", CordeliaCourt);
     gameServer.define("forest", ForestRoom);
     gameServer.define("hood_map", HoodMapRoom);
     gameServer.define("play_park", PlayParkRoom);
