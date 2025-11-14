@@ -1,5 +1,5 @@
 import { Room, Client } from "@colyseus/core";
-import { MapSchema, Schema, type } from "@colyseus/schema";
+import { ArraySchema, MapSchema, Schema, type } from "@colyseus/schema";
 import startCountdown from "../helpers/minsecondsTimer";
 
 class Player extends Schema {
@@ -13,6 +13,10 @@ class CordeliaCourtState extends Schema {
 
   @type("number") timeLeft: number;
   @type("string") timerString: string;
+  @type("string") bookedDate: string;
+  @type("string") bookedTime: string;
+  @type("number") duration: number;
+  @type(["string"]) usernames = new ArraySchema();
 }
 
 export class CordeliaCourt extends Room<CordeliaCourtState> {
@@ -24,8 +28,17 @@ export class CordeliaCourt extends Room<CordeliaCourtState> {
     // console.log("Custom name", options.custom_name);
     // console.log("Date limit duration ", options.expires);
     this.roomId = options.roomId; // store unique session ID
+    this.state.duration = options.duration;
+    this.state.usernames = options.usernames;
+    this.state.bookedDate = options.date;
+    this.state.bookedTime = options.time;
     console.log("CordeliaCourt Room created with ID:", this.roomId);
-    this.state.timeLeft = +options.expires;
+    console.log("Duration: ", this.state.duration);
+    console.log("bookedDate: ", this.state.bookedDate);
+    console.log("bookedTime: ", this.state.bookedTime);
+    console.log("Usernames: ", this.state.usernames);
+    this.state.timeLeft = this.state.duration; //+options.expires;
+    console.log("Timeleft: ", this.state.timeLeft);
 
     this.onMessage("move", (client, data) => {
       const player = this.state.players.get(client.sessionId);
