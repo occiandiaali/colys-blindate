@@ -73,7 +73,9 @@ export class CordeliaCourt extends Room<CordeliaCourtState> {
       // broadcast chat message to everyone
       this.broadcast("chat", { from: client.sessionId, text: message });
     });
-  }
+
+    this.autoDispose = true;
+  } // onCreate
 
   onJoin(client: Client, options: any) {
     // Enforce 2-player limit
@@ -110,6 +112,20 @@ export class CordeliaCourt extends Room<CordeliaCourtState> {
 
     // this.broadcast("playerLeft", client.sessionId);
   }
+
+  //   onLeave(client) {
+  //   this.state.players.delete(client.sessionId);
+
+  //   if (this.clients.length === 0) {
+  //     // Schedule disposal after 30 seconds
+  //     this.clock.setTimeout(() => {
+  //       if (this.clients.length === 0) {
+  //         this.disconnect();
+  //         this.dispose();
+  //       }
+  //     }, 30000);
+  //   }
+  // }
 
   onDispose() {
     console.log("Disposing empty room..");
