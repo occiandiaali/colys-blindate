@@ -28,7 +28,7 @@ export class CordeliaCourt extends Room<CordeliaCourtState> {
     // console.log("Custom name", options.custom_name);
     // console.log("Date limit duration ", options.expires);
     this.roomId = options.roomId || this.roomId; // store unique session ID
-    this.state.duration = options.duration || 0;
+    this.state.duration = +options.duration || 0;
     console.log("CordeliaCourt Room created with ID:", this.roomId);
     console.log("Duration: ", this.state.duration);
 
