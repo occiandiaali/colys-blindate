@@ -6,6 +6,7 @@ class Player extends Schema {
   @type("number") x = 0;
   @type("number") y = 0.5; //-0.2;
   @type("number") z = 0;
+  @type("string") username = "Guest";
 }
 
 class CordeliaCourtState extends Schema {
@@ -13,10 +14,9 @@ class CordeliaCourtState extends Schema {
 
   @type("number") timeLeft: number;
   @type("string") timerString: string;
-  @type("string") bookedDate: string;
-  @type("string") bookedTime: string;
+
   @type("number") duration: number;
-  @type(["string"]) usernames = new ArraySchema();
+  //@type(["string"]) usernames = new ArraySchema();
 }
 
 export class CordeliaCourt extends Room<CordeliaCourtState> {
@@ -27,38 +27,38 @@ export class CordeliaCourt extends Room<CordeliaCourtState> {
     // console.log("Room created ", this.roomId);
     // console.log("Custom name", options.custom_name);
     // console.log("Date limit duration ", options.expires);
-    this.roomId = options.roomId; // store unique session ID
-    this.state.duration = options.duration;
-    this.state.usernames = options.usernames;
-    this.state.bookedDate = options.date;
-    this.state.bookedTime = options.time;
+    this.roomId = options.roomId || this.roomId; // store unique session ID
+    this.state.duration = options.duration || 0;
     console.log("CordeliaCourt Room created with ID:", this.roomId);
     console.log("Duration: ", this.state.duration);
-    console.log("bookedDate: ", this.state.bookedDate);
-    console.log("bookedTime: ", this.state.bookedTime);
-    console.log("Usernames: ", this.state.usernames);
+
     this.state.timeLeft = this.state.duration; //+options.expires;
     console.log("Timeleft: ", this.state.timeLeft);
 
-    this.onMessage("move", (client, data) => {
+    this.onMessage("positionUpdate", (client, data) => {
       const player = this.state.players.get(client.sessionId);
       if (player) {
         player.x = data.x;
         player.y = data.y;
         player.z = data.z;
       }
-      //  console.log(`playerMoved [${(player.x, player.y, player.z)}]`);
-      this.broadcast("playerMoved", {
-        sessionId: client.sessionId,
-        x: player.x,
-        y: player.y,
-        z: player.z,
-      });
     });
 
-    this.onMessage("cubeTouch", (client, data) => {
-      this.broadcast("cubeTouch", data);
-    });
+    // this.onMessage("move", (client, data) => {
+    //   const player = this.state.players.get(client.sessionId);
+    //   if (player) {
+    //     player.x = data.x;
+    //     player.y = data.y;
+    //     player.z = data.z;
+    //   }
+    //   //  console.log(`playerMoved [${(player.x, player.y, player.z)}]`);
+    //   this.broadcast("playerMoved", {
+    //     sessionId: client.sessionId,
+    //     x: player.x,
+    //     y: player.y,
+    //     z: player.z,
+    //   });
+    // });
 
     this.onMessage("peer-id", (client, message) => {
       // Broadcast PeerJS ID to other client
@@ -69,29 +69,46 @@ export class CordeliaCourt extends Room<CordeliaCourtState> {
       });
     });
 
-    this.onMessage("chat", (client, data) => {
-      this.broadcast("chat", data);
+    this.onMessage("chat", (client, message) => {
+      // broadcast chat message to everyone
+      this.broadcast("chat", { from: client.sessionId, text: message });
     });
   }
 
   onJoin(client: Client, options: any) {
-    this.state.players.set(client.sessionId, new Player());
+    // Enforce 2-player limit
+    if (this.clients.length > 2) {
+      console.log("Room full, rejecting client:", client.sessionId);
+      client.leave(4000, "Room is full (max 2 players).");
+      return;
+    }
 
-    this.broadcast("playerJoined", client.sessionId);
+    // Each client can pass their own username
+    const username = options.currentUser;
+    console.log(username, "joined room", this.roomId);
+
+    const player = new Player();
+    player.username = username;
+    this.state.players.set(client.sessionId, player);
+    // this.state.players.set(client.sessionId, new Player());
+
+    // this.broadcast("playerJoined", client.sessionId);
     if (this.clients.length === 2) {
       this.broadcast("startDate", this.state.timeLeft);
       //  this.state.timerString = startCountdown(this.state.timeLeft);
-      this.broadcast("players", this.clients.length);
+      //  this.broadcast("players", (client.sessionId, this.state.usernames));
     }
   } // onJoin
 
   onLeave(client: Client, consented: boolean) {
+    console.log("Client left:", client.sessionId);
     this.state.players.delete(client.sessionId);
 
-    this.broadcast("playerLeft", client.sessionId);
+    // this.broadcast("playerLeft", client.sessionId);
   }
 
   onDispose() {
-    this.broadcast("disposed", "Disposing empty room..");
+    console.log("Disposing empty room..");
+    // this.broadcast("disposed", "Disposing empty room..");
   }
 }
