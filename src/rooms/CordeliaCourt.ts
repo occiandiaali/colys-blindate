@@ -79,13 +79,17 @@ export class CordeliaCourt extends Room<CordeliaCourtState> {
     // Enforce 2-player limit
     if (this.clients.length > 2) {
       console.log("Room full, rejecting client:", client.sessionId);
-      client.leave(4000, "Room is full (max 2 players).");
+      client.leave(4000, "Room is full (max 2 users).");
+
       return;
     }
 
     // Each client can pass their own username
     const username = options.currentUser;
-    console.log(username, "joined room", this.roomId);
+    //console.log(username, "joined room", this.roomId);
+    console.log(
+      `${username} joined room ${this.roomId} with sessionID: ${client.sessionId}`
+    );
 
     const player = new Player();
     player.username = username;
