@@ -1,6 +1,7 @@
 import config from "@colyseus/tools";
 import { monitor } from "@colyseus/monitor";
 import { playground } from "@colyseus/playground";
+import cors from "cors";
 
 /**
  * Import your Room files
@@ -28,6 +29,17 @@ export default config({
   },
 
   initializeExpress: (app) => {
+    // Enable CORS for dev + prod
+    app.use(
+      cors({
+        origin: [
+          "http://localhost:5173", // SvelteKit dev
+          //  "https://your-frontend.onrender.com"  // Production frontend
+        ],
+        methods: ["GET", "POST", "OPTIONS"],
+        allowedHeaders: ["Content-Type"],
+      })
+    );
     /**
      * Bind your custom express routes here:
      * Read more: https://expressjs.com/en/starter/basic-routing.html
