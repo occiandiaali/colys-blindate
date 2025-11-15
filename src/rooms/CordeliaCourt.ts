@@ -79,10 +79,6 @@ export class CordeliaCourt extends Room<CordeliaCourtState> {
   } // onCreate
 
   onJoin(client: Client, options: any) {
-    const player = new Player();
-    player.username = `One_${client.sessionId}`;
-    console.log("Client joined:", player, "options:", options);
-
     // Enforce 2-player limit
     // if (this.clients.length > 2) {
     //   console.log("Room full, rejecting client:", client.sessionId);
@@ -90,15 +86,24 @@ export class CordeliaCourt extends Room<CordeliaCourtState> {
 
     //   return;
     // }
-    if (this.state.players.size >= 2) {
+    //if (this.state.players.size >= 2) {
+    if (this.clients.length > 2) {
       console.log("Room full, rejecting client:", client.sessionId);
       client.leave(4000, "Room is full (max 2 users).");
       // client.leave();
       return;
     } else {
+      const player = new Player();
+      player.username = `One_${client.sessionId}`;
+      console.log(
+        "Client joined:",
+        JSON.stringify(player),
+        "options:",
+        options
+      );
       this.state.players.set(client.sessionId, player);
 
-      // this.broadcast("playerJoined", client.sessionId);
+      this.broadcast("playerJoined", client.sessionId);
       if (this.clients.length === 2) {
         this.broadcast("startDate", this.state.timeLeft);
         console.log("Starting date for timer ", this.state.timeLeft);
