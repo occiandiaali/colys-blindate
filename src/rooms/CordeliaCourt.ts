@@ -20,16 +20,15 @@ class CordeliaCourtState extends Schema {
 }
 
 export class CordeliaCourt extends Room<CordeliaCourtState> {
-  maxClients = 2;
-
   onCreate(options: any) {
+    this.maxClients = 2;
     // this.setState(new CordeliaCourtState())
     this.state = new CordeliaCourtState();
     // console.log("Room created ", this.roomId);
     // console.log("Custom name", options.custom_name);
     // console.log("Date limit duration ", options.expires);
     this.roomId = options.roomId || this.roomId; // store unique session ID
-    this.state.duration = +options.duration || 0;
+    this.state.duration = options.timer || 0;
     console.log("CordeliaCourt Room created with ID:", this.roomId);
     console.log("Duration: ", this.state.duration);
 
@@ -79,25 +78,26 @@ export class CordeliaCourt extends Room<CordeliaCourtState> {
   } // onCreate
 
   onJoin(client: Client, options: any) {
+    console.log("Client joined:", client.sessionId, "options:", options);
     // Enforce 2-player limit
-    // if (this.clients.length > 2) {
-    //   console.log("Room full, rejecting client:", client.sessionId);
-    //   client.leave(4000, "Room is full (max 2 users).");
+    if (this.clients.length > 2) {
+      console.log("Room full, rejecting client:", client.sessionId);
+      client.leave(4000, "Room is full (max 2 users).");
 
-    //   return;
-    // }
+      return;
+    }
 
     // Each client can pass their own username
-    const username = options.currentUser;
+    //const username = options.currentUser;
     //console.log(username, "joined room", this.roomId);
-    console.log(
-      `${username} joined room ${this.roomId} with sessionID: ${client.sessionId}`
-    );
+    // console.log(
+    //   `${username} joined room ${this.roomId} with sessionID: ${client.sessionId}`
+    // );
 
-    const player = new Player();
-    player.username = username;
-    this.state.players.set(client.sessionId, player);
-    // this.state.players.set(client.sessionId, new Player());
+    // const player = new Player();
+    // player.username = username;
+    // this.state.players.set(client.sessionId, player);
+    this.state.players.set(client.sessionId, new Player());
 
     // this.broadcast("playerJoined", client.sessionId);
     if (this.clients.length === 2) {

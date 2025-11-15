@@ -13,6 +13,7 @@ import { ForestRoom } from "./rooms/ForestRoom";
 import { HoodMapRoom } from "./rooms/HoodMapRoom";
 import { PlayParkRoom } from "./rooms/PlayParkRoom";
 import { CordeliaCourt } from "./rooms/CordeliaCourt";
+import { matchMaker } from "colyseus";
 
 export default config({
   initializeGameServer: (gameServer) => {
@@ -46,6 +47,23 @@ export default config({
      */
     app.get("/hello_world", (req, res) => {
       res.send("Let's get ready to rumblllllllle!");
+    });
+
+    // Example metadata endpoint
+    app.get("/room/:id", async (req, res) => {
+      const roomId = req.params.id;
+      const room = await matchMaker.getRoomById(roomId); //server.matchMaker.getRoomById(roomId);
+
+      if (!room) {
+        return res.status(404).json({ error: "Room not found" });
+      }
+
+      res.json({
+        roomId: room.roomId,
+        clients: room.clients,
+        maxClients: room.maxClients,
+        metadata: room.metadata, // you can set this in your room
+      });
     });
 
     /**
