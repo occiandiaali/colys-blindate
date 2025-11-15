@@ -35,6 +35,7 @@ export default config({
       cors({
         origin: [
           "http://localhost:5173", // SvelteKit dev
+          "https://playcanv.as", // Game scene hosting
           //  "https://your-frontend.onrender.com"  // Production frontend
         ],
         methods: ["GET", "POST", "OPTIONS"],

@@ -31,6 +31,7 @@ export class CordeliaCourt extends Room<CordeliaCourtState> {
     this.state.duration = options.timer || 0;
     console.log("CordeliaCourt Room created with ID:", this.roomId);
     console.log("Duration: ", this.state.duration);
+    console.log("Members: ", options.members);
 
     this.state.timeLeft = this.state.duration; //+options.expires;
     console.log("Timeleft: ", this.state.timeLeft);
