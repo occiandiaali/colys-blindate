@@ -86,15 +86,15 @@ export class CordeliaCourt extends Room<CordeliaCourtState> {
 
     //   return;
     // }
-    //if (this.state.players.size >= 2) {
-    if (this.clients.length > 2) {
+    if (this.state.players.size >= 2) {
       console.log("Room full, rejecting client:", client.sessionId);
+      this.state.players.delete(client.sessionId); // is this necessary?
       client.leave(4000, "Room is full (max 2 users).");
       // client.leave();
       return;
     } else {
       const player = new Player();
-      player.username = `One_${client.sessionId}`;
+      player.username = `user_${client.sessionId}`;
       console.log(
         "Client joined:",
         JSON.stringify(player),
