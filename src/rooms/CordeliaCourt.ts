@@ -79,7 +79,7 @@ export class CordeliaCourt extends Room<CordeliaCourtState> {
   } // onCreate
 
   onJoin(client: Client, options: any) {
-    const player = this.state.players.get(client.sessionId);
+    const player = new Player();
     player.username = `One_${client.sessionId}`;
     console.log("Client joined:", player, "options:", options);
 
