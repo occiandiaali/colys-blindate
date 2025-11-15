@@ -21,19 +21,27 @@ class CordeliaCourtState extends Schema {
 
 export class CordeliaCourt extends Room<CordeliaCourtState> {
   onCreate(options: any) {
+    this.setMetadata({
+      allowedUsers: options.allowedUsers,
+      timer: options.timer,
+      thisRoom: options.roomId,
+    });
     this.maxClients = 2;
     // this.setState(new CordeliaCourtState())
     this.state = new CordeliaCourtState();
     // console.log("Room created ", this.roomId);
     // console.log("Custom name", options.custom_name);
     // console.log("Date limit duration ", options.expires);
-    this.roomId = options.roomId || this.roomId; // store unique session ID
-    this.state.duration = options.timer || 0;
-    console.log("CordeliaCourt Room created with ID:", this.roomId);
-    console.log("Duration: ", this.state.duration);
-    console.log("Members: ", options.members);
+    // this.roomId = options.roomId || this.roomId; // store unique session ID
+    this.state.duration = this.metadata.timer || 0; //options.timer || 0;
+    // console.log("CordeliaCourt Room created with ID:", this.roomId);
+    // console.log("Duration: ", this.state.duration);
+    // console.log("Members: ", options.members);
+    console.log("CordeliaCourt Room created with ID:", this.metadata.thisRoom);
+    console.log("Duration: ", this.metadata.timer);
+    console.log("Members: ", this.metadata.allowedUsers);
 
-    this.state.timeLeft = this.state.duration; //+options.expires;
+    this.state.timeLeft = this.metadata.timer; //this.state.duration; //+options.expires;
     console.log("Timeleft: ", this.state.timeLeft);
 
     this.onMessage("positionUpdate", (client, data) => {
@@ -80,37 +88,38 @@ export class CordeliaCourt extends Room<CordeliaCourtState> {
 
   onJoin(client: Client, options: any) {
     // Enforce 2-player limit
-    // if (this.clients.length > 2) {
-    //   console.log("Room full, rejecting client:", client.sessionId);
-    //   client.leave(4000, "Room is full (max 2 users).");
+    if (this.clients.length > 2) {
+      console.log("Room full, rejecting client:", client.sessionId);
+      client.leave(4001, "Room is full (max 2 users).");
 
+      return;
+    }
+    // const allowed = this.metadata.allowedUsers;
+    // if (!allowed.includes(options.currentUser)) {
+    //   client.leave(4002, "..not allowed to join!");
     //   return;
     // }
-    if (this.state.players.size >= 2) {
-      console.log("Room full, rejecting client:", client.sessionId);
-      this.state.players.delete(client.sessionId); // is this necessary?
-      client.leave(4000, "Room is full (max 2 users).");
-      // client.leave();
-      return;
-    } else {
-      const player = new Player();
-      player.username = `user_${client.sessionId}`;
-      console.log(
-        "Client joined:",
-        JSON.stringify(player),
-        "options:",
-        options
-      );
-      this.state.players.set(client.sessionId, player);
+    const player = new Player();
+    player.username = `${options.currentUser}_${client.sessionId}`; //`user_${client.sessionId}`;
+    console.log("Client joined:", JSON.stringify(player), "options:", options);
+    this.state.players.set(client.sessionId, player);
 
-      this.broadcast("playerJoined", client.sessionId);
-      if (this.clients.length === 2) {
-        this.broadcast("startDate", this.state.timeLeft);
-        console.log("Starting date for timer ", this.state.timeLeft);
-        //  this.state.timerString = startCountdown(this.state.timeLeft);
-        //  this.broadcast("players", (client.sessionId, this.state.usernames));
-      }
+    //this.broadcast("playerJoined", client.sessionId);
+    this.broadcast("playerJoined", player.username);
+    if (this.clients.length === 2) {
+      this.broadcast("startDate", this.state.timeLeft);
+      console.log("Starting timer# for Date: ", this.state.timeLeft);
+      //  this.state.timerString = startCountdown(this.state.timeLeft);
+      //  this.broadcast("players", (client.sessionId, this.state.usernames));
     }
+    // if (this.state.players.size >= 2) {
+    //   console.log("Room full, rejecting client:", client.sessionId);
+    //   this.state.players.delete(client.sessionId); // is this necessary?
+    //   client.leave(4000, "Room is full (max 2 users).");
+    //   // client.leave();
+    //   return;
+    // } else {
+    // }
 
     // Each client can pass their own username
     //const username = options.currentUser;
