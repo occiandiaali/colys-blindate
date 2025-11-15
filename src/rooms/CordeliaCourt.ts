@@ -79,7 +79,10 @@ export class CordeliaCourt extends Room<CordeliaCourtState> {
   } // onCreate
 
   onJoin(client: Client, options: any) {
-    console.log("Client joined:", client.sessionId, "options:", options);
+    const player = this.state.players.get(client.sessionId);
+    player.username = `One_${client.sessionId}`;
+    console.log("Client joined:", player, "options:", options);
+
     // Enforce 2-player limit
     if (this.clients.length > 2) {
       console.log("Room full, rejecting client:", client.sessionId);
@@ -98,7 +101,9 @@ export class CordeliaCourt extends Room<CordeliaCourtState> {
     // const player = new Player();
     // player.username = username;
     // this.state.players.set(client.sessionId, player);
-    this.state.players.set(client.sessionId, new Player());
+    //this.state.players.set(client.sessionId, new Player());
+
+    this.state.players.set(client.sessionId, player);
 
     // this.broadcast("playerJoined", client.sessionId);
     if (this.clients.length === 2) {
