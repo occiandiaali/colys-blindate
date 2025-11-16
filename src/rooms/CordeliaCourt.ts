@@ -121,7 +121,10 @@ export class CordeliaCourt extends Room<CordeliaCourtState> {
     this.state.players.set(client.sessionId, player);
 
     //this.broadcast("playerJoined", client.sessionId);
-    this.broadcast("playerJoined", player.username);
+    this.broadcast("playerJoined", {
+      username: player.username,
+      key: client.sessionId,
+    });
     if (this.clients.length === 2) {
       this.broadcast("startDate", this.state.timeLeft);
       console.log("Starting timer# for Date: ", this.state.timeLeft);
