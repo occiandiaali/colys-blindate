@@ -122,7 +122,7 @@ export class CordeliaCourt extends Room<CordeliaCourtState> {
 
     //this.broadcast("playerJoined", client.sessionId);
     this.broadcast("playerJoined", {
-      username: player.username,
+      player: player,
       key: client.sessionId,
     });
     if (this.clients.length === 2) {
