@@ -27,14 +27,14 @@ class CordeliaCourtState extends Schema {
 
 export class CordeliaCourt extends Room<CordeliaCourtState> {
   onCreate(options: any) {
+    this.setState(new CordeliaCourtState());
+    this.maxClients = 2;
+    //this.state = new CordeliaCourtState();
     this.setMetadata({
       allowedUsers: options.allowedUsers,
       timer: options.timer,
       thisRoom: options.roomId,
     });
-    this.maxClients = 2;
-    // this.setState(new CordeliaCourtState())
-    this.state = new CordeliaCourtState();
     // console.log("Room created ", this.roomId);
     // console.log("Custom name", options.custom_name);
     // console.log("Date limit duration ", options.expires);
