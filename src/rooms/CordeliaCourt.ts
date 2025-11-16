@@ -7,6 +7,12 @@ class Player extends Schema {
   @type("number") y = 0.5; //-0.2;
   @type("number") z = 0;
   @type("string") username = "Guest";
+
+  // Rotation (quaternion)
+  @type("number") qx: number = 0;
+  @type("number") qy: number = 0;
+  @type("number") qz: number = 0;
+  @type("number") qw: number = 1;
 }
 
 class CordeliaCourtState extends Schema {
@@ -46,10 +52,20 @@ export class CordeliaCourt extends Room<CordeliaCourtState> {
 
     this.onMessage("positionUpdate", (client, data) => {
       const player = this.state.players.get(client.sessionId);
-      if (player) {
-        player.x = data.x;
-        player.y = data.y;
-        player.z = data.z;
+      if (!player) return;
+      player.x = data.x;
+      player.y = data.y;
+      player.z = data.z;
+
+      // if (player) {
+      // }
+
+      // Update rotation (if provided)
+      if (data.qx !== undefined) {
+        player.qx = data.qx;
+        player.qy = data.qy;
+        player.qz = data.qz;
+        player.qw = data.qw;
       }
     });
 
