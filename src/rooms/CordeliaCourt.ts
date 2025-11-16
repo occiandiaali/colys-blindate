@@ -104,12 +104,12 @@ export class CordeliaCourt extends Room<CordeliaCourtState> {
 
   onJoin(client: Client, options: any) {
     // Enforce 2-player limit
-    if (this.clients.length > 2) {
-      console.log("Room full, rejecting client:", client.sessionId);
-      client.leave(4001, "Room is full (max 2 users).");
+    // if (this.clients.length > 2) {
+    //   console.log("Room full, rejecting client:", client.sessionId);
+    //   client.leave(4001, "Room is full (max 2 users).");
 
-      return;
-    }
+    //   return;
+    // }
     // const allowed = this.metadata.allowedUsers;
     // if (!allowed.includes(options.currentUser)) {
     //   client.leave(4002, "..not allowed to join!");
