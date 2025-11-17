@@ -2,9 +2,9 @@ import { MapSchema, Schema, type } from "@colyseus/schema";
 
 export class Member extends Schema {
   @type("string") username: string;
-  @type("number") x: number;
-  @type("number") y: number;
-  @type("number") z: number;
+  @type("number") x: number = 0;
+  @type("number") y: number = 0.5;
+  @type("number") z: number = 0;
 }
 
 export class GhostEstateState extends Schema {
