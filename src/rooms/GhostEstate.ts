@@ -33,7 +33,7 @@ export class GhostEstate extends Room<GhostEstateState> {
     member.username = `${this.metadata.memberName}_${client.sessionId}`;
     member.x = -(FLOOR_SIZE / 2) + Math.random() * FLOOR_SIZE;
     member.z = -(FLOOR_SIZE / 2) + Math.random() * FLOOR_SIZE;
-    console.log("newMember: ", member);
+    console.log("newMember: ", JSON.stringify(member));
     this.state.members.set(client.sessionId, member);
   }
 
