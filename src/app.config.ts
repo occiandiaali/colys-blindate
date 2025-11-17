@@ -6,6 +6,7 @@ import cors from "cors";
 /**
  * Import your Room files
  */
+import { GhostEstate } from "./rooms/GhostEstate";
 import { MyRoom } from "./rooms/MyRoom";
 import { GreenRoom } from "./rooms/GreenRoom";
 import { MazeRoom } from "./rooms/MazeRoom";
@@ -14,14 +15,14 @@ import { HoodMapRoom } from "./rooms/HoodMapRoom";
 import { PlayParkRoom } from "./rooms/PlayParkRoom";
 import { CordeliaCourt } from "./rooms/CordeliaCourt";
 import { matchMaker } from "colyseus";
-import { DuplexRoom } from "./rooms/DuplexRoom";
 
 export default config({
   initializeGameServer: (gameServer) => {
     /**
      * Define your room handlers:
      */
-    gameServer.define("duplexe", DuplexRoom);
+
+    gameServer.define("ghost_estate", GhostEstate);
     gameServer.define("cordelia_court", CordeliaCourt);
     gameServer.define("forest", ForestRoom);
     gameServer.define("hood_map", HoodMapRoom);
