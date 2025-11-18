@@ -3,7 +3,8 @@ import { GhostEstateState, Player } from "./schema/GhostEstateState";
 
 export class GhostEstate extends Room<GhostEstateState> {
   onCreate(options: any): void | Promise<any> {
-    this.setState(new GhostEstateState());
+    //this.setState(new GhostEstateState());
+    this.state = new GhostEstateState();
     this.maxClients = 2;
     console.log("Initial state:", this.state.toJSON());
 
