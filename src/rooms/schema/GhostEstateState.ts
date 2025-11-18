@@ -9,8 +9,8 @@ export class Player extends Schema {
 
 export class GhostEstateState extends Schema {
   @type({ map: Player }) players = new MapSchema<Player>();
-  @type("number") timeLeft: number;
-  @type("string") timerString: string;
+  @type("number") timeLeft: number = 0;
+  @type("string") timerString: string = "";
 
-  @type("number") duration: number;
+  @type("number") duration: number = 0;
 }
