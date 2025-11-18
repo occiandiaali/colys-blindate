@@ -5,6 +5,7 @@ export class GhostEstate extends Room<GhostEstateState> {
   onCreate(options: any): void | Promise<any> {
     this.setState(new GhostEstateState());
     this.maxClients = 2;
+    console.log("Initial state:", this.state.toJSON());
 
     this.setMetadata({
       allowedUsers: options.allowedUsers,
@@ -28,7 +29,7 @@ export class GhostEstate extends Room<GhostEstateState> {
     auth?: any
   ): void | Promise<any> {
     console.log(client.sessionId, " joined..");
-    const FLOOR_SIZE = 4;
+    //const FLOOR_SIZE = 4;
     const player = new Player();
     player.username = `${this.metadata.memberName}_${client.sessionId}`;
     // member.x = Math.floor(Math.random() * 2); //-(FLOOR_SIZE / 2) + Math.random() * FLOOR_SIZE;
