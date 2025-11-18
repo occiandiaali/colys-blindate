@@ -1,5 +1,5 @@
 import { Client, Room } from "colyseus";
-import { GhostEstateState, Member } from "./schema/GhostEstateState";
+import { GhostEstateState, Player } from "./schema/GhostEstateState";
 
 export class GhostEstate extends Room<GhostEstateState> {
   onCreate(options: any): void | Promise<any> {
@@ -14,11 +14,11 @@ export class GhostEstate extends Room<GhostEstateState> {
     });
 
     this.onMessage("positionUpdate", (client, data) => {
-      const member = this.state.members.get(client.sessionId);
-      if (!member) return;
-      member.x = data.x;
-      member.y = data.y;
-      member.z = data.z;
+      const player = this.state.players.get(client.sessionId);
+      if (!player) return;
+      player.x = data.x;
+      player.y = data.y;
+      player.z = data.z;
     });
   }
 
@@ -29,20 +29,20 @@ export class GhostEstate extends Room<GhostEstateState> {
   ): void | Promise<any> {
     console.log(client.sessionId, " joined..");
     const FLOOR_SIZE = 4;
-    const member = new Member();
-    member.username = `${this.metadata.memberName}_${client.sessionId}`;
+    const player = new Player();
+    player.username = `${this.metadata.memberName}_${client.sessionId}`;
     // member.x = Math.floor(Math.random() * 2); //-(FLOOR_SIZE / 2) + Math.random() * FLOOR_SIZE;
     // member.y = 0.5;
     // member.z = Math.floor(Math.random() * 3); //-(FLOOR_SIZE / 2) + Math.random() * FLOOR_SIZE;
-    console.log("newMember: ", JSON.stringify(member));
+    console.log("newMember: ", JSON.stringify(player));
     console.log("newMember options: ", options);
-    this.state.members.set(client.sessionId, member);
+    this.state.players.set(client.sessionId, player);
   }
 
   onLeave(client: Client<any, any>, consented?: boolean): void | Promise<any> {
     console.log(client.sessionId, "left!");
 
-    this.state.members.delete(client.sessionId);
+    this.state.players.delete(client.sessionId);
   }
 
   onDispose(): void | Promise<any> {

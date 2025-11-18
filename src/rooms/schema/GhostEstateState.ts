@@ -1,6 +1,6 @@
 import { MapSchema, Schema, type } from "@colyseus/schema";
 
-export class Member extends Schema {
+export class Player extends Schema {
   @type("string") username: string;
   @type("number") x: number = 0;
   @type("number") y: number = 0.5;
@@ -8,7 +8,7 @@ export class Member extends Schema {
 }
 
 export class GhostEstateState extends Schema {
-  @type({ map: Member }) members = new MapSchema<Member>();
+  @type({ map: Player }) players = new MapSchema<Player>();
   @type("number") timeLeft: number;
   @type("string") timerString: string;
 
