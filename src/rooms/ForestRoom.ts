@@ -29,11 +29,13 @@ export class ForestRoom extends Room<ForestRoomState> {
     this.setMetadata({
       members: options.participants,
       currentuser: options.thisUser,
-      duration: options.duration,
+      duration: +options.duration,
       roomID: options.roomid,
     });
     console.log(
-      `${this.metadata.roomID} roomID created for ${this.metadata.duration}`
+      `${this.metadata.roomID} roomID created for ${
+        this.metadata.duration / 60000
+      } mins`
     );
     console.log(`${this.metadata.currentuser} entered the room..`);
     console.log(`${this.metadata.members} in room ${this.metadata.roomID}`);
