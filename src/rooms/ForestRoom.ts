@@ -14,14 +14,29 @@ class ForestRoomState extends Schema {
 }
 
 export class ForestRoom extends Room<ForestRoomState> {
-  maxClients = 2;
-  state = new ForestRoomState();
+  //   participants: roomProps.members,
+  // thisUser: roomProps.currentUser,
+  // duration: roomProps.timer,
+  // roomid: roomProps.roomId,
 
   onCreate(options: any) {
+    this.maxClients = 2;
+    this.state = new ForestRoomState();
     // console.log("Room created ", this.roomId);
     // console.log("Custom name", options.custom_name);
     // console.log("Date limit duration ", options.expires);
     this.state.timeLeft = +options.expires;
+    this.setMetadata({
+      members: options.participants,
+      currentuser: options.thisUser,
+      duration: options.duration,
+      roomID: options.roomid,
+    });
+    console.log(
+      `${this.metadata.roomID} roomID created for ${this.metadata.duration}`
+    );
+    console.log(`${this.metadata.currentuser} entered the room..`);
+    console.log(`${this.metadata.members} in room ${this.metadata.roomID}`);
 
     this.onMessage("move", (client, data) => {
       const player = this.state.players.get(client.sessionId);
