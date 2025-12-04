@@ -6,6 +6,7 @@ import cors from "cors";
 /**
  * Import your Room files
  */
+import { GameRoom } from "./rooms/GameRoom";
 import { GhostEstate } from "./rooms/GhostEstate";
 import { MyRoom } from "./rooms/MyRoom";
 import { GreenRoom } from "./rooms/GreenRoom";
@@ -22,6 +23,7 @@ export default config({
      * Define your room handlers:
      */
 
+    gameServer.define("game_room", GameRoom);
     gameServer.define("ghost_estate", GhostEstate);
     gameServer.define("cordelia_court", CordeliaCourt);
     gameServer.define("forest", ForestRoom);
