@@ -24,6 +24,8 @@ export class GameRoom extends Room<GameRoomState> {
     this.state = new GameRoomState();
     this.state.timeLimit = options.limit * 60;
 
+    this.broadcast("roomCreated", options.roomid);
+
     this.onMessage("move", (client, data) => {
       const player = this.state.players.get(client.sessionId);
       if (player) {
@@ -51,7 +53,12 @@ export class GameRoom extends Room<GameRoomState> {
     this.state.players.set(client.sessionId, player);
     console.log(`Player joined: ${player.username}-${player.sessionId}..`);
 
-    if (this.clients.length === 2) {
+    // if (this.clients.length === 2) {
+    //   this.state.gameStarted = true;
+    //   this.broadcast("gameStarted", this.state.gameStarted);
+    //   this.setSimulationInterval(this.tick.bind(this), 1000);
+    // }
+    if (Object.keys(this.state.players).length === 2) {
       this.state.gameStarted = true;
       this.broadcast("gameStarted", this.state.gameStarted);
       this.setSimulationInterval(this.tick.bind(this), 1000);
