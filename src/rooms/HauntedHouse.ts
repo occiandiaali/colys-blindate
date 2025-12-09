@@ -22,9 +22,10 @@ export class HauntedHouse extends Room<HauntedHouseState> {
     this.state = new HauntedHouseState();
 
     console.log("HauntedHouse Room created with options:", options);
+    //roomid, timer, me, participants -> options
 
     // const timer = options.timer || 60;
-    this.state.timeLimit = options.timer || 300; // Default 300 seconds (5mins)
+    this.state.timeLimit = options.timer * 60 || 300; // Default 300 seconds (5mins)
 
     // Setup schema with players map...
     this.onMessage("updatePosition", (client, data) => {
