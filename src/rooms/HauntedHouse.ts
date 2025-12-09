@@ -22,7 +22,6 @@ export class HauntedHouse extends Room<HauntedHouseState> {
     this.state = new HauntedHouseState();
 
     console.log("HauntedHouse Room created with options:", options);
-    //roomid, timer, me, participants -> options
 
     // const timer = options.timer || 60;
     //  this.state.timeLimit = options.timer * 60 || 300; // Default 300 seconds (5mins)
@@ -47,9 +46,7 @@ export class HauntedHouse extends Room<HauntedHouseState> {
   }
 
   onJoin(client: Client, options: any) {
-    console.log(
-      options.me + " with sessionId " + client.sessionId + " just joined!"
-    );
+    console.log(client.sessionId + " just joined!");
     // Add player to state...
     const player = new Player();
     player.username = options.me;
