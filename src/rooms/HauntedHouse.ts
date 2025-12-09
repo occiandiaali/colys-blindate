@@ -63,7 +63,7 @@ export class HauntedHouse extends Room<HauntedHouseState> {
         //  this.state.timeLimit--;
         let remaining = this.state.timeLimit * 60; // mins to seconds
         // format as mm:ss
-        const minutes = Math.floor(this.state.timeLimit / 60);
+        const minutes = Math.floor(remaining / 60);
         const seconds = remaining % 60;
         const formatted = `${minutes}:${seconds.toString().padStart(2, "0")}`;
         //this.broadcast("remainingTime", this.state.timeLimit);
