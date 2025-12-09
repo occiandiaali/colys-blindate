@@ -24,8 +24,7 @@ export class HauntedHouse extends Room<HauntedHouseState> {
     console.log("HauntedHouse Room created with options:", options);
 
     // const timer = options.timer || 60;
-    //  this.state.timeLimit = options.timer * 60 || 300; // Default 300 seconds (5mins)
-    this.state.timeLimit = options.timer || 300; // Default 300 seconds (5mins)
+    this.state.timeLimit = options.timer * 60 || 300; // Default 300 seconds (5mins)
 
     // Setup schema with players map...
     this.onMessage("updatePosition", (client, data) => {
@@ -58,30 +57,19 @@ export class HauntedHouse extends Room<HauntedHouseState> {
     }
     if (this.state.gameStarted) {
       this.broadcast("gameStarted", this.state.gameStarted);
+
       // Countdown loop
       const interval = setInterval(() => {
-        //  this.state.timeLimit--;
-        let remaining = this.state.timeLimit * 60; // mins to seconds
-        // format as mm:ss
-        const minutes = Math.floor(remaining / 60);
-        const seconds = remaining % 60;
-        const formatted = `${minutes}:${seconds.toString().padStart(2, "0")}`;
-        //this.broadcast("remainingTime", this.state.timeLimit);
-        this.broadcast("remainingTime", formatted);
+        this.state.timeLimit--;
 
-        // if (this.state.timeLimit <= 0) {
-        //   this.state.gameOver = true;
-        //   clearInterval(interval);
-        //   this.disconnect();
-        //   this.broadcast("gameOver", this.state.gameOver);
-        // }
-        if (remaining <= 0) {
+        this.broadcast("remainingTime", this.state.timeLimit);
+
+        if (this.state.timeLimit <= 0) {
           this.state.gameOver = true;
           clearInterval(interval);
           this.disconnect();
           this.broadcast("gameOver", this.state.gameOver);
         }
-        remaining--;
       }, 1000);
     }
   }
