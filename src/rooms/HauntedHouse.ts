@@ -51,6 +51,7 @@ export class HauntedHouse extends Room<HauntedHouseState> {
     player.username = options.me;
     this.state.players.set(client.sessionId, player);
     console.log("In players obj: ", JSON.stringify(this.state.players));
+    console.log(player.username, " is in the Room..");
 
     if (this.clients.length === 2) {
       this.state.gameStarted = true;
