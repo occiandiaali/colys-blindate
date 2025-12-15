@@ -2,8 +2,6 @@ import { Room, Client } from "@colyseus/core";
 import { MapSchema, Schema, type } from "@colyseus/schema";
 
 class Player extends Schema {
-  //   @type("string") sessionId: string;
-  @type("string") username: string;
   @type("number") x = 0;
   @type("number") y = 0.5; //-0.2;
   @type("number") z = 0;
@@ -48,10 +46,8 @@ export class HauntedHouse extends Room<HauntedHouseState> {
     console.log(client.sessionId + " just joined!");
     // Add player to state...
     const player = new Player();
-    player.username = options.me;
     this.state.players.set(client.sessionId, player);
     console.log("In players obj: ", JSON.stringify(this.state.players));
-    console.log(player.username, " is in the Room..");
 
     if (this.clients.length === 2) {
       this.state.gameStarted = true;
