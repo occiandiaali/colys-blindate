@@ -3,7 +3,7 @@ import { MapSchema, Schema, type } from "@colyseus/schema";
 
 class Player extends Schema {
   @type("string") sessionId: string;
-  @type("string") username: string;
+  //@type("string") username: string;
   @type("number") x = 0;
   @type("number") y = 0.5; //-0.2;
   @type("number") z = 0;
@@ -22,7 +22,7 @@ export class GameRoom extends Room<GameRoomState> {
   onCreate(options: any): void | Promise<any> {
     this.maxClients = 2;
     this.state = new GameRoomState();
-    this.state.timeLimit = options.limit * 60;
+    this.state.timeLimit = 300; //options.limit * 60;
 
     this.broadcast("roomCreated", options.roomid);
 
