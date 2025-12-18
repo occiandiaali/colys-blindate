@@ -113,7 +113,7 @@ export class GameRoom extends Room<State> {
       const player = this.state.players.get(client.sessionId); //this.state.players[client.sessionId];
       if (!player) return;
 
-      const speed = 0.1;
+      const speed = 1; //0.1;
 
       if (data.w) player.z -= speed;
       if (data.s) player.z += speed;
