@@ -1,5 +1,5 @@
 import { Room, Client } from "@colyseus/core";
-import { MapSchema, Schema, type } from "@colyseus/schema";
+import { ArraySchema, MapSchema, Schema, type } from "@colyseus/schema";
 
 class Player extends Schema {
   @type("number") x = 0;

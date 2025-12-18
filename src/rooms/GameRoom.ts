@@ -49,9 +49,9 @@ export class GameRoom extends Room<GameRoomState> {
   ): void | Promise<any> {
     const player = new Player();
     player.sessionId = client.sessionId;
-    player.username = options.currentUser;
+    //player.username = options.currentUser;
     this.state.players.set(client.sessionId, player);
-    console.log(`Player joined: ${player.username}-${player.sessionId}..`);
+    // console.log(`Player joined: ${player.username}-${player.sessionId}..`);
 
     // if (this.clients.length === 2) {
     //   this.state.gameStarted = true;
