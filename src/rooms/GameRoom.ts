@@ -114,9 +114,10 @@ export class GameRoom extends Room<State> {
       if (!player) return;
 
       const speed = 0.1; // 1 is too fast for real-time movement
-
-      player.x += data.dx * speed;
-      player.z += data.dz * speed;
+      if (typeof data.dx === "number" && typeof data.dz === "number") {
+        player.x += data.dx * speed;
+        player.z += data.dz * speed;
+      }
     });
   }
 
