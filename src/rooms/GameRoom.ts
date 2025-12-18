@@ -109,14 +109,42 @@ export class GameRoom extends Room<State> {
     // this.setState(new State());
     this.state = new State();
 
+    // this.onMessage("input", (client, data) => {
+    //   const player = this.state.players.get(client.sessionId);
+    //   if (!player) return;
+
+    //   const speed = 0.1; // 1 is too fast for real-time movement
+    //   if (typeof data.dx === "number" && typeof data.dz === "number") {
+    //     player.x += data.dx * speed;
+    //     player.z += data.dz * speed;
+    //   }
+    // });
     this.onMessage("input", (client, data) => {
       const player = this.state.players.get(client.sessionId);
       if (!player) return;
 
-      const speed = 0.1; // 1 is too fast for real-time movement
-      if (typeof data.dx === "number" && typeof data.dz === "number") {
-        player.x += data.dx * speed;
-        player.z += data.dz * speed;
+      const speed = 0.1;
+      const nextX = player.x + data.dx * speed;
+      const nextZ = player.z + data.dz * speed;
+
+      const half = 0.3; // half cube size
+      let blocked = false;
+
+      // Check collision with other players
+      this.state.players.forEach((other, id) => {
+        if (id === client.sessionId) return;
+
+        const overlapX = Math.abs(nextX - other.x) < half * 2;
+        const overlapZ = Math.abs(nextZ - other.z) < half * 2;
+
+        if (overlapX && overlapZ) {
+          blocked = true;
+        }
+      });
+
+      if (!blocked) {
+        player.x = nextX;
+        player.z = nextZ;
       }
     });
   }
