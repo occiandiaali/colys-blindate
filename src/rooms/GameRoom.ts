@@ -110,15 +110,13 @@ export class GameRoom extends Room<State> {
     this.state = new State();
 
     this.onMessage("input", (client, data) => {
-      const player = this.state.players.get(client.sessionId); //this.state.players[client.sessionId];
+      const player = this.state.players.get(client.sessionId);
       if (!player) return;
 
-      const speed = 1; //0.1;
+      const speed = 0.1; // 1 is too fast for real-time movement
 
-      if (data.w) player.z -= speed;
-      if (data.s) player.z += speed;
-      if (data.a) player.x -= speed;
-      if (data.d) player.x += speed;
+      player.x += data.dx * speed;
+      player.z += data.dz * speed;
     });
   }
 
