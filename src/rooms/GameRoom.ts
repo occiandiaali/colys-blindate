@@ -101,6 +101,7 @@ class Player extends Schema {
 class State extends Schema {
   @type({ map: Player }) players = new MapSchema<Player>();
   @type("number") countdown: number;
+  @type("string") ID: string;
 }
 
 export class GameRoom extends Room<State> {
@@ -109,10 +110,13 @@ export class GameRoom extends Room<State> {
   onCreate(options: any) {
     // this.setState(new State());
     this.state = new State();
-    const limit = options.countdownDuration;
+    const limit = options.timer; //options.countdownDuration;
+    const id = options.room;
     console.log("onCreate timer: ", limit);
+    console.log("Room ID: ", id);
     //this.state.countdown = options.countdownDuration * 60 || 300; // Default 300 seconds (5mins)
     this.state.countdown = +limit * 60 || 300; // Default 300 seconds (5mins)
+    this.state.ID = id;
 
     // this.onMessage("input", (client, data) => {
     //   const player = this.state.players.get(client.sessionId);
