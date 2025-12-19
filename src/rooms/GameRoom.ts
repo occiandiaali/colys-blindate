@@ -109,8 +109,10 @@ export class GameRoom extends Room<State> {
   onCreate(options: any) {
     // this.setState(new State());
     this.state = new State();
-    console.log("onCreate timer: ", options.countdownDuration);
-    this.state.countdown = options.countdownDuration * 60 || 300; // Default 300 seconds (5mins)
+    const limit = options.countdownDuration;
+    console.log("onCreate timer: ", limit);
+    //this.state.countdown = options.countdownDuration * 60 || 300; // Default 300 seconds (5mins)
+    this.state.countdown = +limit * 60 || 300; // Default 300 seconds (5mins)
 
     // this.onMessage("input", (client, data) => {
     //   const player = this.state.players.get(client.sessionId);
