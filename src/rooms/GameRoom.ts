@@ -100,14 +100,16 @@ class Player extends Schema {
 
 class State extends Schema {
   @type({ map: Player }) players = new MapSchema<Player>();
+  @type("number") countdown = 0;
 }
 
 export class GameRoom extends Room<State> {
   maxClients = 2;
 
-  onCreate() {
+  onCreate(options: any) {
     // this.setState(new State());
     this.state = new State();
+    this.state.countdown = options.countdownDuration;
 
     // this.onMessage("input", (client, data) => {
     //   const player = this.state.players.get(client.sessionId);
@@ -156,6 +158,18 @@ export class GameRoom extends Room<State> {
     // this.state.players[client.sessionId] = p;
     this.state.players.set(client.sessionId, p);
     console.log(`Player joined: ${client.sessionId}..`);
+
+    if (this.clients.length === 2) {
+      console.log("Starting date..");
+      const timer = setInterval(() => {
+        if (this.state.countdown > 0) {
+          this.state.countdown--;
+        } else {
+          clearInterval(timer);
+          this.disconnect();
+        }
+      }, 1000);
+    }
   }
 
   onLeave(client: Client) {
