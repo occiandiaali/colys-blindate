@@ -109,6 +109,7 @@ export class GameRoom extends Room<State> {
   onCreate(options: any) {
     // this.setState(new State());
     this.state = new State();
+    console.log("onCreate timer: ", options.countdownDuration);
     this.state.countdown = options.countdownDuration * 60 || 300; // Default 300 seconds (5mins)
 
     // this.onMessage("input", (client, data) => {
@@ -161,7 +162,7 @@ export class GameRoom extends Room<State> {
 
     if (this.clients.length === 2) {
       this.broadcast("gameStarted", "Starting your timer..");
-      console.log("Starting date..");
+      console.log(`Starting date..Duration: ${this.state.countdown}`);
       const timer = setInterval(() => {
         if (this.state.countdown > 0) {
           this.state.countdown--;
