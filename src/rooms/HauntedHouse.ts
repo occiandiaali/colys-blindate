@@ -68,7 +68,10 @@ export class HauntedHouse extends Room<HauntedHouseState> {
       const interval = setInterval(() => {
         this.state.timeLimit--;
 
-        this.broadcast("remainingTime", this.state.timeLimit);
+        this.broadcast("remainingTime", {
+          balance: this.state.timeLimit,
+          clientId: client.sessionId,
+        });
 
         if (this.state.timeLimit <= 0) {
           this.state.gameOver = true;
