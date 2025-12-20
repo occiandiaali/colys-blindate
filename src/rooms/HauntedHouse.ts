@@ -40,7 +40,16 @@ export class HauntedHouse extends Room<HauntedHouseState> {
         z: player.z,
       });
     });
-  }
+
+    this.onMessage("peer-id", (client, message) => {
+      // Broadcast PeerJS ID to other client
+      this.clients.forEach((c) => {
+        if (c.sessionId !== client.sessionId) {
+          c.send("peer-id", message);
+        }
+      });
+    });
+  } // onCreate
 
   onJoin(client: Client, options: any) {
     console.log(client.sessionId + " just joined!");
