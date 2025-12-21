@@ -6,16 +6,12 @@ import cors from "cors";
 /**
  * Import your Room files
  */
-import { HauntedHouse } from "./rooms/HauntedHouse";
-import { GameRoom } from "./rooms/GameRoom";
-import { GhostEstate } from "./rooms/GhostEstate";
+import { PlaycanvasRoom } from "./rooms/PlaycanvasRoom";
+import { R3FRoom } from "./rooms/R3FRoom";
+
 import { MyRoom } from "./rooms/MyRoom";
 import { GreenRoom } from "./rooms/GreenRoom";
-import { MazeRoom } from "./rooms/MazeRoom";
-import { ForestRoom } from "./rooms/ForestRoom";
-import { HoodMapRoom } from "./rooms/HoodMapRoom";
-import { PlayParkRoom } from "./rooms/PlayParkRoom";
-import { CordeliaCourt } from "./rooms/CordeliaCourt";
+
 import { matchMaker } from "colyseus";
 
 export default config({
@@ -24,16 +20,10 @@ export default config({
      * Define your room handlers:
      */
 
-    gameServer.define("haunted_house", HauntedHouse);
-    gameServer.define("game_room", GameRoom);
-    gameServer.define("ghost_estate", GhostEstate);
-    gameServer.define("cordelia_court", CordeliaCourt);
-    gameServer.define("forest", ForestRoom);
-    gameServer.define("hood_map", HoodMapRoom);
-    gameServer.define("play_park", PlayParkRoom);
+    gameServer.define("play_canvas", PlaycanvasRoom);
+    gameServer.define("r3f_room", R3FRoom);
     gameServer.define("my_room", MyRoom);
     gameServer.define("green_room", GreenRoom);
-    gameServer.define("maze_room", MazeRoom);
   },
 
   initializeExpress: (app) => {

@@ -7,19 +7,19 @@ class Player extends Schema {
   @type("number") z = 0;
 }
 
-class HauntedHouseState extends Schema {
+class PlaycanvasRoomState extends Schema {
   @type({ map: Player }) players = new MapSchema<Player>();
   @type("number") timeLimit: number; // In seconds?
   @type("boolean") gameStarted: boolean = false;
   @type("boolean") gameOver: boolean = false;
 }
 
-export class HauntedHouse extends Room<HauntedHouseState> {
+export class PlaycanvasRoom extends Room<PlaycanvasRoomState> {
   onCreate(options: any) {
     this.maxClients = 2;
-    this.state = new HauntedHouseState();
+    this.state = new PlaycanvasRoomState();
 
-    console.log("HauntedHouse Room created with options:", options);
+    console.log("PlayCanvas Room created with options:", options);
 
     // const timer = options.timer || 60;
     this.state.timeLimit = options.timer * 60 || 300; // Default 300 seconds (5mins)
